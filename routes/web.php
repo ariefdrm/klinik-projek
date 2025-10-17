@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\DosenController;
 use App\Http\Controllers\PasienController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::resource("pasien", PasienController::class);
+Route::resource("dosen", DosenController::class);
 
 Route::get('/', function () {
     return view('auth.login');

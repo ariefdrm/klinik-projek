@@ -14,6 +14,13 @@ class DosenController extends Controller
     public function index()
     {
         //
+        //
+        $dosen = Dosen::latest()
+            ->where('name', 'like', '%' .  request('cari') . '%')
+            ->paginate(10);
+        $data["dosen"] = $dosen;
+
+        return view("dosen_index", $data);
     }
 
     /**

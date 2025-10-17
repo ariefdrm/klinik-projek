@@ -17,7 +17,8 @@ class DosenFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "nama" =>  $this->faker->name(),
+            "no_hp" => $this->faker->phoneNumber()
         ];
     }
 }

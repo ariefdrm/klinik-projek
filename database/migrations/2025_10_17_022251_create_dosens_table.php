@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('dosens', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+            $table->string('no_hp');
             $table->timestamps();
         });
     }
