@@ -47,14 +47,33 @@ class PasienController extends Controller
     public function create()
     {
         //
+        return view('pasien_create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
+
     {
-        //
+
+        $requestData = $request->validate([
+            'no_pasien' => 'required|unique:pasiens,no_pasien',
+            'name' => 'required',
+            'umur' => 'required|numeric',
+            'jenis_kelamin' => 'required|in:laki-laki,perempuan',
+            'alamat' => 'nullable',
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:5000',
+        ]);
+
+        $pasien = new pasien(); //membuat objek kosong
+        $pasien->fill($requestData); //mengisi objek dengan data yang sudah divalidasi requestData
+
+        $pasien->foto = $request->file('foto')->store('public'); //mengisi objek dengan pathFoto
+
+        $pasien->save();
+
+        return back()->with('pesan', 'Data sudah disimpan');
     }
 
     /**

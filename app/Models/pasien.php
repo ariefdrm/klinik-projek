@@ -9,4 +9,6 @@ class pasien extends Model
 {
     //
     use HasFactory;
+
+    protected $guarded = [];
 }
