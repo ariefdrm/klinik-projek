@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\pasien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+use function Flasher\Prime\flash;
 
 class PasienController extends Controller
 {
@@ -69,10 +72,9 @@ class PasienController extends Controller
         $pasien = new pasien(); //membuat objek kosong
         $pasien->fill($requestData); //mengisi objek dengan data yang sudah divalidasi requestData
 
-        $pasien->foto = $request->file('foto')->store('public'); //mengisi objek dengan pathFoto
+        $pasien->foto = $request->file('foto')->store('images', 'public'); //mengisi objek dengan pathFoto
 
         $pasien->save();
-
         return back()->with('pesan', 'Data sudah disimpan');
     }
 
@@ -90,6 +92,9 @@ class PasienController extends Controller
     public function edit(string $id)
     {
         //
+        $data['pasien'] = Pasien::findOrFail($id);
+
+        return view('pasien_edit', $data);
     }
 
     /**
@@ -98,6 +103,29 @@ class PasienController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $requestData = $request->validate([
+            'name' => 'required|min:3',
+            'no_pasien' => 'required|unique:pasiens,no_pasien,' . $id,
+            'umur' => 'required',
+            'alamat' => 'nullable',
+            'jenis_kelamin' => 'required',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+        ]);
+
+        $pasien = Pasien::findOrfail($id);
+
+        $pasien->fill($requestData);
+
+        if ($request->hasFile('foto')) {
+
+            Storage::delete($pasien->foto);
+
+            $pasien->foto = $request->file('foto')->store('public');
+        }
+
+        $pasien->save();
+
+        return redirect('/pasien')->with('pesan', 'data sudah diupdate');
     }
 
     /**
@@ -106,5 +134,12 @@ class PasienController extends Controller
     public function destroy(string $id)
     {
         //
+        $pasien = Pasien::findOrFail($id);
+
+        $pasien->delete();
+
+        flash()->success("Pasien succes to delete");
+
+        return back();
     }
 }
