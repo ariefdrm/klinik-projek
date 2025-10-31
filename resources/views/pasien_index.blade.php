@@ -24,6 +24,7 @@
                                     <th>No Pasien</th>
                                     <th>Nama</th>
                                     <th>Jenis Kelamin</th>
+                                    <th>Foto</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -33,6 +34,23 @@
                                         <td>{{ $item->no_pasien }}</td>
                                         <td> {{ $item->name }} </td>
                                         <td>{{ $item->jenis_kelamin }}</td>
+                                           <td>
+                                                <img src="{{ asset('storage/' . $item->foto) ?? $item->foto }}" alt="profile picture" style="max-width: 100px;">
+                                            </td>
+                                         {{-- <td><img src="{{ storage_path(). $item->foto }}" alt=""></td> --}}
+                                        <td>
+                                            <a href="/pasien/{{ $item->id }}/edit" class="btn btn-warning btn-sm ml-2">
+                                            Edit
+                                            </a>
+                                            <form action="/pasien/{{ $item->id }}" method="post" class="d-inline">
+                                                @csrf
+                                                @method('delete')
+                                                <button class="btn btn-danger btn-sm ml-2"
+                                               onclick="return confirm('Yakin ingin menghapus data?')">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
