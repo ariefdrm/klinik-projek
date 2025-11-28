@@ -57,7 +57,6 @@ class PasienController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-
     {
 
         $requestData = $request->validate([
@@ -117,7 +116,6 @@ class PasienController extends Controller
         $pasien->fill($requestData);
 
         if ($request->hasFile('foto')) {
-
             Storage::delete($pasien->foto);
 
             $pasien->foto = $request->file('foto')->store('public');
