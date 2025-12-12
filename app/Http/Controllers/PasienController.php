@@ -21,6 +21,11 @@ class PasienController extends Controller
             ->paginate(10);
         $data["pasien"] = $pasien;
 
+
+        if (request('minta_apa') == 'json') {
+            return response()->json($data);
+        }
+
         return view("pasien_index", $data);
     }
 
